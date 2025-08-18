@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Traffic Light Controller</title>
+    <style>
+      /* Basic page styling */
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        margin: 0;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        font-family:
+          system-ui,
+          -apple-system,
+          sans-serif;
+      }
+
+      /* Traffic light container */
+      .traffic-light {
+        background: #2c2c2c;
+        padding: 20px;
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        margin-bottom: 30px;
+      }
+
+      /* Individual lights */
+      .light {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        margin: 15px;
+        background: #111;
+        transition: all 0.3s ease;
+        position: relative;
+      }
+
+      /* Active states for each light */
+      .light.red.active {
+        background: #ff4444;
+        box-shadow: 0 0 40px #ff4444;
+      }
+
+      .light.yellow.active {
+        background: #ffbb33;
+        box-shadow: 0 0 40px #ffbb33;
+      }
+
+      .light.green.active {
+        background: #00c851;
+        box-shadow: 0 0 40px #00c851;
+        animation: pulse 1s ease-in-out infinite;
+      }
+
+      /* Control button */
+      .control-button {
+        padding: 12px 30px;
+        font-size: 18px;
+        font-weight: bold;
+        background: white;
+        color: #333;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        transition:
+          transform 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+
+      .control-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      .control-button:active {
+        transform: translateY(0);
+      }
+
+      /* Celebration animation */
+      @keyframes celebrate {
+        0% {
+          transform: scale(1) rotate(0deg);
+        }
+        25% {
+          transform: scale(1.05) rotate(3deg);
+        }
+        50% {
+          transform: scale(1) rotate(-3deg);
+        }
+        75% {
+          transform: scale(1.05) rotate(3deg);
+        }
+        100% {
+          transform: scale(1) rotate(0deg);
+        }
+      }
+
+      /* Pulse animation for green light */
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.1);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      /* Go mode for the whole traffic light */
+      .traffic-light.go-mode {
+        animation: celebrate 0.5s ease-in-out;
+      }
+
+      /* Optional: Add a car that moves when green */
+      .car-container {
+        width: 100%;
+        height: 60px;
+        position: relative;
+        overflow: hidden;
+        margin-top: 0px;
+      }
+
+      .car {
+        width: 60px;
+        height: 30px;
+        background: #4a4a4a;
+        border-radius: 5px;
+        position: absolute;
+        left: -70px;
+        top: 15px;
+      }
+
+      .car::after {
+        content: "";
+        position: absolute;
+        width: 50px;
+        height: 20px;
+        background: #6a6a6a;
+        top: -10px;
+        left: 5px;
+        border-radius: 5px 5px 0 0;
+      }
+
+      .car.go {
+        left: 100%;
+        transition: left 5s ease-in-out;
+      }
+
+      /* Road for the car */
+      .road {
+        width: 100%;
+        height: 60px;
+        background: #333;
+        position: relative;
+        margin-top: 20px;
+        border-radius: 5px;
+      }
+
+      .road::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: repeating-linear-gradient(
+          90deg,
+          #fff,
+          #fff 20px,
+          transparent 20px,
+          transparent 40px
+        );
+        transform: translateY(-50%);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Traffic Light Structure -->
+    <div class="traffic-light">
+      <div class="light red"></div>
+      <div class="light yellow"></div>
+      <div class="light green"></div>
+    </div>
+
+    <!-- Control Button -->
+    <button class="control-button">Change Light</button>
+
+    <!-- Optional: Car animation -->
+    <div class="road">
+      <div class="car-container">
+        <div class="car"></div>
+      </div>
+    </div>
+
+    <script>
+      // Find all the elements we need
+      const redLight = document.querySelector(".red");
+      const yellowLight = document.querySelector(".yellow");
+      const greenLight = document.querySelector(".green");
+      const button = document.querySelector(".control-button");
+      const trafficLight = document.querySelector(".traffic-light");
+      const car = document.querySelector(".car");
+
+      // Keep track of which light is currently on
+      let currentLight = 0; // 0 = green, 1 = yellow, 2 = green
+
+      // Array to help with button text
+      const lightNames = ["Green", "Yellow", "Red"];
+      const nextLight = ["Green", "Yellow", "Red"];
+
+      // Function to update button text
+      function updateButtonText() {
+        button.textContent = `Next: ${nextLight[currentLight]}`;
+      }
+
+      // When the button is clicked
+      button.addEventListener("click", function () {
+        // First, turn off all lights
+        redLight.classList.remove("active");
+        yellowLight.classList.remove("active");
+        greenLight.classList.remove("active");
+        trafficLight.classList.remove("go-mode");
+        car.classList.remove("go");
+
+        // Turn on the appropriate light
+        if (currentLight === 0) {
+          greenLight.classList.add("active");
+          // Add celebration for green!
+          trafficLight.classList.add("go-mode");
+          // Make the car go!
+          setTimeout(function () {
+            car.classList.add("go");
+          }, 100);
+          // Remove celebration after animation
+          setTimeout(function () {
+            trafficLight.classList.remove("go-mode");
+          }, 500);
+        } else if (currentLight === 1) {
+          yellowLight.classList.add("active");
+        } else if (currentLight === 2) {
+          redLight.classList.add("active");
+        }
+
+        // Move to the next light
+        currentLight = currentLight + 1;
+        if (currentLight > 2) {
+          currentLight = 0;
+        }
+
+        // Update button text for next light
+        updateButtonText();
+      });
+
+      // Set initial button text
+      updateButtonText();
+
+      // Optional: Automatic mode (commented out by default)
+      /*
+        setInterval(function() {
+            button.click();
+        }, 2000);
+        */
+    </script>
+  </body>
+</html>
