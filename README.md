@@ -1,10 +1,12 @@
 # JavaScript Interactive Lab: Traffic Light Controller
 
+![Stoplight Preview](assets/stoplight_preview.gif)
+
 ## Welcome! 🚦
 
-Remember all those beautiful CSS transitions and animations you've been creating? Today we're going to discover something magical: JavaScript can be the **conductor** that tells your CSS *when* to perform!
+Remember all those beautiful CSS transitions and animations you've been creating? Today we're going to discover something: JavaScript can be the **conductor** that tells your CSS *when* to perform!
 
-You've just learned a ton of JavaScript concepts in your Scrimba course. Today, we're going to use just a tiny bit of that JavaScript to control CSS in ways that will suddenly make so much click into place.
+You've just learned a ton of JavaScript concepts very quickly. Today, we're going to use just a tiny bit of that JavaScript to control CSS in ways that will help you see how it relates to what you've been learning about HTML and CSS.
 
 ## What We're Building
 
@@ -28,9 +30,9 @@ Create a new file called `traffic-light.html`. You'll need:
    - Think about what classes each circle needs. They all share something in common (they're all lights), but each is also unique (red, yellow, green)
 4. **A button** that will control the lights - give it descriptive text and a class name
 5. **Link your CSS file** (create `styles.css`)
-6. **Link your JavaScript file** at the bottom of your body tag (create `script.js`)
+6. **Link your JavaScript file** (`<script src="script.js"></script>`) at the bottom of your body tag (create `script.js`)
 
-**Checkpoint**: Open your HTML in the browser. You should see three divs and a button (unstyled for now).
+**Checkpoint**: Open your HTML in the browser. You should see three divs and a button (unstyled for now). Open your browser console (F12) to check for any errors (it should give you an error if you have not correctly created and linked your JavaScript file)
 
 ### Style Your Traffic Light
 
@@ -51,6 +53,8 @@ In your `styles.css`, let's make this actually look like a traffic light:
    - **Important**: Add a transition property! Something like "all 0.3s ease" will make changes smooth
 
 **Checkpoint**: You should see something that looks like a traffic light with three dark circles!
+
+![Part 1 Visual Checkpoint](assets/stoplight_checkpoint_1.png)
 
 ## Part 2: Creating CSS States (30 minutes)
 
@@ -75,6 +79,8 @@ Make each active state:
 ### Test It Manually!
 
 Here's a quick test - temporarily add the word "active" to one of your light divs in the HTML. Does it light up? Perfect! Now remove "active" again - we'll let JavaScript handle that.
+
+![Part 2 Visual Checkpoint](assets/stoplight_checkpoint_2.png)
 
 ## Part 3: JavaScript Takes Control! (1 hour)
 
@@ -108,9 +114,9 @@ Click your button and check the console - working? Great!
 ### Step 3: Tracking Which Light Is On
 
 Before your event listener, create a variable to track the current light:
-- Start at 0 (that'll be red)
+- Start at 0 (that'll be green)
 - 1 will be yellow
-- 2 will be green
+- 2 will be red
 
 ### Step 4: The Light-Switching Logic
 
@@ -164,7 +170,7 @@ Create a class (like `.go-mode`) that:
 In your JavaScript:
 1. **Find the traffic light container** (add this with your other querySelector lines)
 2. **When the green light turns on**, also add your celebration class to the container
-3. **Remove the celebration class** after the animation finishes
+3. **Optional**: Remove the celebration class after the animation finishes
    - Hint: `setTimeout(function() { ... }, 500)` runs code after 500ms
 
 ### Make Green Extra Special
@@ -211,4 +217,4 @@ Before you finish, think about:
 
 ---
 
-**You did it!** You've created your first JavaScript-controlled interface where CSS and JavaScript work together perfectly! 🎉
+**You did it!** You've created a JavaScript-controlled interface where CSS and JavaScript work together perfectly! 🎉
